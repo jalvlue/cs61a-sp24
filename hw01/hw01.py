@@ -14,9 +14,9 @@ def a_plus_abs_b(a, b):
     3
     """
     if b < 0:
-        f = _____
+        f = sub
     else:
-        f = _____
+        f = add
     return f(a, b)
 
 
@@ -44,7 +44,31 @@ def two_of_three(i, j, k):
     >>> two_of_three(5, 5, 5)
     50
     """
-    return _____
+    return sum(square(x) for x in (i, j, k)) - square(max(i, j, k))
+
+
+def square(n):
+    """Returns the square of a number.
+
+    Args:
+        n (int or float): The number to be squared.
+
+    Returns:
+        int or float: The square of the input number.
+
+    Examples:
+        >>> square(2)
+        4
+        >>> square(3)
+        9
+        >>> square(0)
+        0
+        >>> square(-1)
+        1
+        >>> square(1.5)
+        2.25
+    """
+    return n * n
 
 
 def two_of_three_syntax_check():
@@ -69,6 +93,13 @@ def largest_factor(n):
     1
     """
     "*** YOUR CODE HERE ***"
+    ret = n - 1
+    while ret > 1:
+        if n % ret == 0:
+            return ret
+        ret -= 1
+
+    return ret
 
 
 def hailstone(n):
@@ -91,3 +122,14 @@ def hailstone(n):
     1
     """
     "*** YOUR CODE HERE ***"
+    ret = 1
+    while n != 1:
+        ret += 1
+        print(n)
+        if n % 2 == 0:
+            n //= 2
+        else:
+            n = n * 3 + 1
+
+    print(n)
+    return ret
