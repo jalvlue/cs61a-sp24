@@ -1,3 +1,6 @@
+# zip files
+*.zip
+
 # cs61a ok things
 .ok*
 
