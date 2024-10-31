@@ -208,6 +208,11 @@ def always_roll(n):
     assert n >= 0 and n <= 10
     # BEGIN PROBLEM 6
     "*** YOUR CODE HERE ***"
+
+    def always_roll_strategy(player_score, opponent_score):
+        return n
+
+    return always_roll_strategy
     # END PROBLEM 6
 
 
