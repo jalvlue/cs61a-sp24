@@ -244,6 +244,14 @@ def is_always_roll(strategy, goal=GOAL):
     """
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
+    orig_roll = strategy(0, 0)
+    for i in range(0, goal, 1):
+        for j in range(0, goal, 1):
+            curr_roll = strategy(i, j)
+            if orig_roll != curr_roll:
+                return False
+
+    return True
     # END PROBLEM 7
 
 
