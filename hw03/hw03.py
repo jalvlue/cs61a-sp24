@@ -1,7 +1,7 @@
-LAB_SOURCE_FILE=__file__
+LAB_SOURCE_FILE = __file__
 
 
-HW_SOURCE_FILE=__file__
+HW_SOURCE_FILE = __file__
 
 
 def num_eights(n):
@@ -29,6 +29,16 @@ def num_eights(n):
     """
     "*** YOUR CODE HERE ***"
 
+    def is_eight(n):
+        if n == 8:
+            return 1
+        return 0
+
+    if n < 10:
+        return is_eight(n)
+
+    return is_eight(n % 10) + num_eights(n // 10)
+
 
 def digit_distance(n):
     """Determines the digit distance of n.
@@ -50,6 +60,13 @@ def digit_distance(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n < 10:
+        return 0
+
+    last_one = n % 10
+    last_two = (n // 10) % 10
+
+    return abs(last_one - last_two) + digit_distance(n // 10)
 
 
 def interleaved_sum(n, odd_func, even_func):
@@ -73,6 +90,18 @@ def interleaved_sum(n, odd_func, even_func):
     """
     "*** YOUR CODE HERE ***"
 
+    def odd(m):
+        if m == n:
+            return odd_func(n)
+        return odd_func(m) + even(m + 1)
+
+    def even(m):
+        if m == n:
+            return even_func(n)
+        return even_func(m) + odd(m + 1)
+
+    return odd(1)
+
 
 def next_larger_coin(coin):
     """Returns the next larger coin in order.
@@ -91,6 +120,7 @@ def next_larger_coin(coin):
     elif coin == 10:
         return 25
 
+
 def next_smaller_coin(coin):
     """Returns the next smaller coin in order.
     >>> next_smaller_coin(25)
@@ -107,6 +137,7 @@ def next_smaller_coin(coin):
         return 5
     elif coin == 5:
         return 1
+
 
 def count_coins(total):
     """Return the number of ways to make change using coins of value of 1, 5, 10, 25.
@@ -127,10 +158,25 @@ def count_coins(total):
     """
     "*** YOUR CODE HERE ***"
 
+    def change_up_to_n(curr_total, n):
+        if curr_total == 0:
+            return 1
+        if curr_total < 0:
+            return 0
+        if n == None:
+            return 0
+
+        return change_up_to_n(curr_total - n, n) + change_up_to_n(
+            curr_total, next_smaller_coin(n)
+        )
+
+    return change_up_to_n(total, 25)
+
 
 def print_move(origin, destination):
     """Print instructions to move a disk."""
     print("Move the top disk from rod", origin, "to rod", destination)
+
 
 def move_stack(n, start, end):
     """Print the moves required to move n disks on the start pole to the end
@@ -165,6 +211,7 @@ def move_stack(n, start, end):
 
 from operator import sub, mul
 
+
 def make_anonymous_factorial():
     """Return the value of an expression that computes factorial.
 
@@ -176,5 +223,4 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
-
+    return "YOUR_EXPRESSION_HERE"
