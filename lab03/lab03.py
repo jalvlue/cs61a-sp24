@@ -13,10 +13,10 @@ def print_if(s, f):
     >>> print(result)  # print_if should return None
     None
     """
+    "*** YOUR CODE HERE ***"
     for x in s:
         if f(x):
             print(x)
-        "*** YOUR CODE HERE ***"
 
 
 def close(s, k):
