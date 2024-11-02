@@ -29,15 +29,12 @@ def num_eights(n):
     """
     "*** YOUR CODE HERE ***"
 
-    def is_eight(n):
-        if n == 8:
-            return 1
+    if n % 10 == 8:
+        return 1 + num_eights(n // 10)
+    elif n < 10:
         return 0
-
-    if n < 10:
-        return is_eight(n)
-
-    return is_eight(n % 10) + num_eights(n // 10)
+    else:
+        return num_eights(n // 10)
 
 
 def digit_distance(n):
@@ -90,17 +87,27 @@ def interleaved_sum(n, odd_func, even_func):
     """
     "*** YOUR CODE HERE ***"
 
-    def odd(m):
-        if m == n:
-            return odd_func(n)
-        return odd_func(m) + even(m + 1)
+    def sum_from(k):
+        if k > n:
+            return 0
+        elif k == n:
+            return odd_func(k)
+        else:
+            return odd_func(k) + even_func(k + 1) + sum_from(k + 2)
 
-    def even(m):
-        if m == n:
-            return even_func(n)
-        return even_func(m) + odd(m + 1)
+    return sum_from(1)
 
-    return odd(1)
+    # def odd(m):
+    #     if m == n:
+    #         return odd_func(n)
+    #     return odd_func(m) + even(m + 1)
+
+    # def even(m):
+    #     if m == n:
+    #         return even_func(n)
+    #     return even_func(m) + odd(m + 1)
+
+    # return odd(1)
 
 
 def next_larger_coin(coin):
@@ -207,6 +214,13 @@ def move_stack(n, start, end):
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
     "*** YOUR CODE HERE ***"
+    if n == 1:
+        print_move(start, end)
+    else:
+        other = 6 - start - end
+        move_stack(n - 1, start, other)
+        print_move(start, end)
+        move_stack(n - 1, other, end)
 
 
 from operator import sub, mul
@@ -223,4 +237,8 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return "YOUR_EXPRESSION_HERE"
+    # damn!
+    # return (lambda f: f(f))(lambda f: lambda x: 1 if x == 0 else x * f(f)(x - 1))
+    return (lambda f: lambda k: f(f, k))(
+        lambda f, k: k if k == 1 else mul(k, f(f, sub(k, 1)))
+    )
