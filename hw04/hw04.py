@@ -21,6 +21,11 @@ def deep_map(f, s):
     True
     """
     "*** YOUR CODE HERE ***"
+    for i in range(len(s)):
+        if type(s[i]) == list:
+            deep_map(f, s[i])
+        else:
+            s[i] = f(s[i])
 
 
 HW_SOURCE_FILE = __file__
@@ -77,12 +82,14 @@ def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
     "*** YOUR CODE HERE ***"
+    return ["planet", mass]
 
 
 def mass(p):
     """Select the mass of a planet."""
     assert is_planet(p), "must call mass on a planet"
     "*** YOUR CODE HERE ***"
+    return p[1]
 
 
 def is_planet(p):
@@ -136,6 +143,19 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_planet(m):
+        return True
+
+    left_arm = left(m)
+    left_end = end(left_arm)
+    right_arm = right(m)
+    right_end = end(right_arm)
+    return (
+        length(left_arm) * total_mass(left_end)
+        == length(right_arm) * total_mass(right_end)
+        and balanced(left_end)
+        and balanced(right_end)
+    )
 
 
 HW_SOURCE_FILE = __file__
@@ -151,6 +171,14 @@ def max_path_sum(t):
     17
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return label(t)
+
+    tmp_max = 0
+    for b in branches(t):
+        tmp_sum = max_path_sum(b)
+        tmp_max = tmp_sum if tmp_sum > tmp_max else tmp_max
+    return tmp_max + label(t)
 
 
 # Tree Data Abstraction
