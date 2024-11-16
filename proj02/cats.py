@@ -161,6 +161,20 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+
+    if typed_word in word_list:
+        return typed_word
+
+    def diff_with_typed_word(word):
+        return diff_function(typed_word, word, limit)
+
+    most_diff_work = max(word_list, key=diff_with_typed_word)
+    print("DEBUG: most_diff_word", most_diff_work)
+    if diff_with_typed_word(most_diff_work) > limit:
+        return typed_word
+
+    most_close_word = min(word_list, key=diff_with_typed_word)
+    return most_close_word
     # END PROBLEM 5
 
 
@@ -186,8 +200,25 @@ def feline_fixes(typed, source, limit):
     >>> feline_fixes("rose", "hello", big_limit)   # Substitute: r->h, o->e, s->l, e->l, length difference of 1.
     5
     """
+
     # BEGIN PROBLEM 6
-    assert False, "Remove this line"
+    def helper(typed: str, source: str, remain: int):
+        if remain < 0:
+            return limit + 1
+        if len(typed) == 0:
+            return len(source)
+        if len(source) == 0:
+            return len(typed)
+
+        diff = 1
+        if typed[0] == source[0]:
+            diff = 0
+
+        return diff + helper(typed[1:], source[1:], remain - diff)
+
+    ret = helper(typed, source, limit)
+    print(f"DEBUG: source: {source}, diff: {ret}")
+    return ret
     # END PROBLEM 6
 
 
@@ -211,7 +242,6 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, "Remove this line"
     if ___________:  # Base cases should go here, you may add more base cases as needed.
         # BEGIN
         "*** YOUR CODE HERE ***"
