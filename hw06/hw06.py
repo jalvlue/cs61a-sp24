@@ -1,4 +1,5 @@
-passphrase = '*** PASSPHRASE HERE ***'
+passphrase = "*** PASSPHRASE HERE ***"
+
 
 def midsem_survey(p):
     """
@@ -7,7 +8,8 @@ def midsem_survey(p):
     '3d9f1125b109b311959d068240016badb874603eab75302a445e1a50'
     """
     import hashlib
-    return hashlib.sha224(p.encode('utf-8')).hexdigest()
+
+    return hashlib.sha224(p.encode("utf-8")).hexdigest()
 
 
 class VendingMachine:
@@ -47,7 +49,39 @@ class VendingMachine:
     >>> w.vend()
     'Here is your soda.'
     """
+
     "*** YOUR CODE HERE ***"
+
+    def __init__(self, product: str, price: int):
+        self.product = product
+        self.price = price
+        self.stock = 0
+        self.balance = 0
+
+    def restock(self, num: int):
+        self.stock += num
+        return f"Current {self.product} stock: {self.stock}"
+
+    def add_funds(self, fund):
+        if self.stock <= 0:
+            return f"Nothing left to vend. Please restock. Here is your ${fund}."
+        self.balance += fund
+        return f"Current balance: ${self.balance}"
+
+    def vend(self):
+        if self.stock <= 0:
+            return "Nothing left to vend. Please restock."
+        if self.balance < self.price:
+            return f"Please add ${self.price-self.balance} more funds."
+        self.stock -= 1
+        self.balance -= self.price
+        vend_msg = f"Here is your {self.product}"
+        if self.balance > 0:
+            vend_msg += f" and ${self.balance} change."
+        else:
+            vend_msg += "."
+        self.balance = 0
+        return vend_msg
 
 
 def store_digits(n):
@@ -68,6 +102,11 @@ def store_digits(n):
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     """
     "*** YOUR CODE HERE ***"
+    head = Link.empty
+    while n > 0:
+        n, last_digit = divmod(n, 10)
+        head = Link(last_digit, head)
+    return head
 
 
 def deep_map_mut(func, lnk):
@@ -133,6 +172,7 @@ class Link:
     >>> print(s)                             # Prints str(s)
     <5 7 <8 9>>
     """
+
     empty = ()
 
     def __init__(self, first, rest=empty):
@@ -142,15 +182,14 @@ class Link:
 
     def __repr__(self):
         if self.rest is not Link.empty:
-            rest_repr = ', ' + repr(self.rest)
+            rest_repr = ", " + repr(self.rest)
         else:
-            rest_repr = ''
-        return 'Link(' + repr(self.first) + rest_repr + ')'
+            rest_repr = ""
+        return "Link(" + repr(self.first) + rest_repr + ")"
 
     def __str__(self):
-        string = '<'
+        string = "<"
         while self.rest is not Link.empty:
-            string += str(self.first) + ' '
+            string += str(self.first) + " "
             self = self.rest
-        return string + str(self.first) + '>'
-
+        return string + str(self.first) + ">"
