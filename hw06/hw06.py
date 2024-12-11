@@ -129,6 +129,15 @@ def deep_map_mut(func, lnk):
     <9 <16> 25 36>
     """
     "*** YOUR CODE HERE ***"
+    if lnk == Link.empty:
+        return
+    if not isinstance(lnk, Link):
+        return
+    if isinstance(lnk.first, int):
+        lnk.first = lnk.first * lnk.first
+    else:
+        deep_map_mut(func, lnk.first)
+    deep_map_mut(func, lnk.rest)
 
 
 def two_list(vals, counts):
@@ -150,6 +159,18 @@ def two_list(vals, counts):
     Link(1, Link(1, Link(3, Link(3, Link(2)))))
     """
     "*** YOUR CODE HERE ***"
+    assert len(vals) == len(counts)
+    head = Link(0)
+    curr = head
+    for i in range(len(vals)):
+        val = vals[i]
+        count = counts[i]
+        for _ in range(count):
+            new_node = Link(val)
+            curr.rest = new_node
+            curr = curr.rest
+
+    return head.rest
 
 
 class Link:
@@ -193,3 +214,7 @@ class Link:
             string += str(self.first) + " "
             self = self.rest
         return string + str(self.first) + ">"
+
+
+link1 = Link(3, Link(Link(4), Link(5, Link(6))))
+deep_map_mut(lambda x: x * x, link1)
