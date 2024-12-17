@@ -28,6 +28,8 @@ class Place:
         # Phase 1: Add an entrance to the exit
         # BEGIN Problem 2
         "*** YOUR CODE HERE ***"
+        if exit is not None:
+            exit.entrance = self
         # END Problem 2
 
     def add_insect(self, insect):
@@ -144,6 +146,7 @@ class HarvesterAnt(Ant):
     name = "Harvester"
     implemented = True
     # OVERRIDE CLASS ATTRIBUTES HERE
+    food_cost = 2
 
     def action(self, gamestate):
         """Produce 1 additional food for the colony.
@@ -152,6 +155,7 @@ class HarvesterAnt(Ant):
         """
         # BEGIN Problem 1
         "*** YOUR CODE HERE ***"
+        gamestate.add_food(1)
         # END Problem 1
 
 
@@ -162,6 +166,7 @@ class ThrowerAnt(Ant):
     implemented = True
     damage = 1
     # ADD/OVERRIDE CLASS ATTRIBUTES HERE
+    food_cost = 3
 
     def nearest_bee(self):
         """Return the nearest Bee in a Place (that is not the hive) connected to
@@ -170,7 +175,16 @@ class ThrowerAnt(Ant):
         This method returns None if there is no such Bee (or none in range).
         """
         # BEGIN Problem 3 and 4
-        return random_bee(self.place.bees)  # REPLACE THIS LINE
+        place = self.place
+        while place is not None:
+            if place.is_hive:
+                return None
+            bees = place.bees
+            if len(bees) > 0:
+                return random_bee(bees)
+            place = place.entrance
+
+        return None
         # END Problem 3 and 4
 
     def throw_at(self, target):
@@ -542,6 +556,9 @@ class GameState:
         self.dimensions = dimensions
         self.active_bees = []
         self.configure(beehive, create_places)
+
+    def add_food(self, amount):
+        self.food += amount
 
     def configure(self, beehive, create_places):
         """Configure the places in the colony."""
