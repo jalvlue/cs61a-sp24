@@ -5,7 +5,7 @@ test = {
     {
       'cases': [
         {
-          'answer': 'cf13df85d8ffea8b7928c6f0f860c5e1',
+          'answer': "In the ContainerAnt's ant_contained instance attribute",
           'choices': [
             "In the ContainerAnt's ant_contained instance attribute",
             "In the ContainerAnt's ant_contained class attribute",
@@ -13,12 +13,12 @@ test = {
             "Nowhere, a ContainerAnt has no knowledge of the ant that it's protecting"
           ],
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False,
           'question': 'Where is the ant contained by a ContainerAnt stored?'
         },
         {
-          'answer': '22a2c7eb1d7adee7ea4eb970d3cc09e9',
+          'answer': 'By protecting the ant from Bees and allowing it to perform its original action',
           'choices': [
             'By protecting the ant from Bees and allowing it to perform its original action',
             'By attacking Bees that try to attack it',
@@ -26,7 +26,7 @@ test = {
             'By allowing Bees to pass without attacking'
           ],
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False,
           'question': 'How does a ContainerAnt guard its ant?'
         }

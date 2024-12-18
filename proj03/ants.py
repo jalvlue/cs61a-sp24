@@ -167,6 +167,19 @@ class ThrowerAnt(Ant):
     damage = 1
     # ADD/OVERRIDE CLASS ATTRIBUTES HERE
     food_cost = 3
+    lower_bound = 0
+    upper_bound = float("inf")
+
+    def in_range(self, i):
+        return i >= self.lower_bound and i <= self.upper_bound
+
+    def to_range(self):
+        i = 0
+        place = self.place
+        while i < self.lower_bound and not place is None:
+            i += 1
+            place = place.entrance
+        return place, i
 
     def nearest_bee(self):
         """Return the nearest Bee in a Place (that is not the hive) connected to
@@ -175,15 +188,13 @@ class ThrowerAnt(Ant):
         This method returns None if there is no such Bee (or none in range).
         """
         # BEGIN Problem 3 and 4
-        place = self.place
-        while place is not None:
-            if place.is_hive:
-                return None
+        place, i = self.to_range()
+        while self.in_range(i) and not place is None and not place.is_hive:
             bees = place.bees
             if len(bees) > 0:
                 return random_bee(bees)
+            i += 1
             place = place.entrance
-
         return None
         # END Problem 3 and 4
 
@@ -218,7 +229,9 @@ class ShortThrower(ThrowerAnt):
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 4
-    implemented = False  # Change to True to view in the GUI
+    implemented = True  # Change to True to view in the GUI
+    lower_bound = 0
+    upper_bound = 3
     # END Problem 4
 
 
@@ -229,7 +242,9 @@ class LongThrower(ThrowerAnt):
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 4
-    implemented = False  # Change to True to view in the GUI
+    implemented = True  # Change to True to view in the GUI
+    lower_bound = 5
+    upper_bound = 8
     # END Problem 4
 
 
@@ -241,7 +256,7 @@ class FireAnt(Ant):
     food_cost = 5
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 5
-    implemented = False  # Change to True to view in the GUI
+    implemented = True  # Change to True to view in the GUI
     # END Problem 5
 
     def __init__(self, health=3):
@@ -257,15 +272,60 @@ class FireAnt(Ant):
         """
         # BEGIN Problem 5
         "*** YOUR CODE HERE ***"
+        place = self.place
+        super().reduce_health(amount)
+        if place is None:
+            return
+        damage = amount + (self.damage if self.health <= 0 else 0)
+
+        # bee.reduce_health(damage) would remove this bee from place.bees but not bees when it dies
+        bees = place.bees[:]
+        for bee in bees:
+            bee.reduce_health(damage)
         # END Problem 5
 
 
 # BEGIN Problem 6
 # The WallAnt class
+class WallAnt(Ant):
+    name = "Wall"
+    food_cost = 4
+    implemented = True
+
+    def __init__(self, health=4):
+        super().__init__(health)
+
+    def action(self, gamestate):
+        return super().action(gamestate)
+
+
 # END Problem 6
+
 
 # BEGIN Problem 7
 # The HungryAnt Class
+class HungryAnt(Ant):
+    name = "Hungry"
+    chewing_turns = 3
+    food_cost = 4
+    implemented = True
+
+    def __init__(self, health=1):
+        super().__init__(health)
+        self.turns_to_chew = 0
+
+    def action(self, gamestate):
+        if self.turns_to_chew > 0:
+            self.turns_to_chew -= 1
+            return
+        if self.place is None:
+            return
+        bee = random_bee(self.place.bees)
+        if not bee is None:
+            bee.reduce_health(bee.health)
+            self.turns_to_chew = self.chewing_turns
+
+
 # END Problem 7
 
 
@@ -280,14 +340,16 @@ class ContainerAnt(Ant):
         super().__init__(health)
         self.ant_contained = None
 
-    def can_contain(self, other):
+    def can_contain(self, other):  # type: ignore
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        return not other.is_container and self.ant_contained is None
         # END Problem 8a
 
     def store_ant(self, ant):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        self.ant_contained = ant
         # END Problem 8a
 
     def remove_ant(self, ant):
@@ -308,6 +370,9 @@ class ContainerAnt(Ant):
     def action(self, gamestate):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        if self.ant_contained is None:
+            return super().action(gamestate)
+        return self.ant_contained.action(gamestate)
         # END Problem 8a
 
 
